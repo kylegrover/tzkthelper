@@ -1,0 +1,17 @@
+{
+  "name": "tzkthelper",
+  "version": "0.1.1",
+  "manifest_version": 2,
+  "description": "add hicetnunc link and label banned accounts",
+  "homepage_url": "http://ufffd.com",
+  "content_scripts": [
+    {
+      "matches": [
+        "https://tzkt.io/*"
+      ],
+      "js": [
+        "inject.js"
+      ]
+    }
+  ]
+}
