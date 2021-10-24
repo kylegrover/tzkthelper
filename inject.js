@@ -1,6 +1,9 @@
 // this is the code which will be injected into a given page...
+(function() { // keep this code in a function to avoid polluting the global namespace
+	// set up vars
+	var wallet = window.location.pathname.split('/')[1];
 
-async function hicExists(wallet) {
+	// general hicdex wrapper function
 	async function fetchGraphQL(operationsDoc, operationName, variables) {
 		const result = await fetch(
 			"https://api.hicdex.com/v1/graphql",
@@ -16,7 +19,8 @@ async function hicExists(wallet) {
 		return await result.json();
 	}
 
-	async function doFetch() {
+	// check if wallet has hicetnunc account
+	async function hicExists(wallet) {
 		const { errors, data } = await fetchGraphQL(`query HicExists($wallet: String!) {
 			hic_et_nunc_holder(where: {address: {_eq: $wallet}}) {
 			address
@@ -30,12 +34,6 @@ async function hicExists(wallet) {
 		return result
 	}
 
-	return doFetch()
-}
-
-(function() {
-	var wallet = window.location.pathname.split('/')[1];
-
 	// check banlist
 	fetch('https://raw.githubusercontent.com/hicetnunc2000/hicetnunc-reports/main/filters/w.json')
 		.then(function(response) {
@@ -44,6 +42,7 @@ async function hicExists(wallet) {
 		.then(function(json) {
 			// console.log(json)
 			if (json.includes(wallet)) {
+				// wait for the page to load then show ban message
 				function maybeBan() {
 					// ban label
 					var acc_title = document.querySelector('.acc-info .v-list-item__title');
@@ -62,7 +61,7 @@ async function hicExists(wallet) {
 
 	hicExists(wallet).then(function(result) {
 		if (result) {
-			// add hicetnunc link
+			// wait for page to load, then add hicetnunc link
 			function maybeAddLink() {
 				var acc_links = document.querySelector('.acc-info > div:first-child > div:last-child > div:first-child');
 				if (acc_links) {
