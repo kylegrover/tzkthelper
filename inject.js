@@ -75,4 +75,16 @@
 			maybeAddLink();
 		}
 	});
+	// wait for page to load, then add copybuster link
+	function maybeCopybusterLink() {
+		var acc_links = document.querySelector('.acc-info > div:first-child > div:last-child > div:first-child');
+		if (acc_links) {
+			var acc_links_add = document.createElement('div');
+			acc_links_add.innerHTML = '<div><a href="https://copybuster.vercel.app/?tz='+wallet+'" target="_blank" class="v-btn v-btn--icon v-btn--round theme--light v-size--default primary--text" rel="nofollow noopener"><span class="v-btn__content"><span aria-hidden="true" class="v-icon notranslate theme--light" style="font-size: 24px; height: 24px; width: 24px;">🕵️‍♀️</span></span></a></div>';
+			acc_links.insertBefore(acc_links_add, acc_links.firstChild);
+		} else {
+			setTimeout(maybeCopybusterLink, 500);
+		}
+	}
+	setTimeout(maybeCopybusterLink, 500);
 })();
